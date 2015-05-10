@@ -1,0 +1,11 @@
+#!/bin/bash
+# -----------------------------------------------------------------------------
+# docker-yavdr start script
+# written by Jonadalar
+# modified by domse
+#
+# based on: Isaac Bythewood
+# -----------------------------------------------------------------------------
+
+# initial start of YAVDR init scripts here!
+vdr -p 6419 -P vnsiserver -P pvrinput -P "wirbelscan --use-pvrinput" -P "xineliboutput --local=none --primary --remote=0.0.0.0:37890"
