@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# docker-yavdr-headless
+# docker-vdr-headless
 #
 #
 # Require: Docker (http://www.docker.io/)
@@ -12,94 +12,73 @@ ENV DEBIAN_FRONTEND noninteractive
 # Set correct environment variables
 ENV HOME /root
 
-# don't ask for stupid things
+# Don't ask user options when installing
 env   DEBIAN_FRONTEND noninteractive
 RUN echo APT::Install-Recommends "0"; >> /etc/apt/apt.conf 
 RUN echo APT::Install-Suggests "0"; >> /etc/apt/apt.conf 
 
-#update the system
+# Update the system
 RUN ln -s -f /bin/true /usr/bin/chfn && \
     apt-get -y update && apt-get -y upgrade && dpkg-divert --local --rename --add /sbin/initctl && \
     ln -sf /bin/true /sbin/initctl
 
-# adding yavdr specific stuff
-#run   apt-add-repository -y ppa:yavdr/main
+# Add yavdr packages
 run   apt-add-repository -y ppa:yavdr/unstable-main
 run   apt-add-repository -y ppa:yavdr/unstable-vdr
-#run   apt-add-repository -y ppa:yavdr/unstable-yavdr
-#run   apt-add-repository -y ppa:yavdr/unstable-xbmc
 
-
-# add mutiverse to sources.list to accomodate markad stuff
+# Add mutiverse to sources.list 
 RUN echo "deb http://security.ubuntu.com/ubuntu trusty multiverse" >> /etc/apt/sources.list
 
-#update the system
+# Update the system
 RUN apt-get -y update && apt-get -y dist-upgrade
 
-RUN apt-get -y install vdr vdr-plugin-vnsiserver vdr-plugin-pvrinput  vdr-plugin-xineliboutput xineliboutput-sxfe libxineliboutput-sxfe vdr-plugin-wirbelscan
+# Install vdr with plugins for:
+#   * vnsiserver: connect kodi clients
+#   * pvrinput: we still use analog cards to view TV in argentina
+#   * xineliboutput: needed for testing vdr is working. See:
+#	- https://wiki.archlinux.org/index.php/VDR#Xineliboutput_-_Full-Featured_and_Budget_Cards
+#   * wirbelscan: automatic scan for channels
+# 
+RUN apt-get -y install vdr vdr-plugin-vnsiserver vdr-plugin-pvrinput vdr-plugin-xineliboutput \
+	xineliboutput-sxfe libxineliboutput-sxfe vdr-plugin-wirbelscan
 
+# Install linux-firmware to access specific video drivers
 RUN apt-get -y install linux-firmware
-
-#RUN apt-get -y install w-scan dvb-app-scan dvb-apps
-
-# install vdr stuff
-#RUN apt-get -y install at avahi-daemon bash-completion hsetroot logrotate update-manager-core ureadahead vdr-plugin-dummydevice w-scan yavdr-essential-docker-headless 
-#RUN apt-get -y install vlc-nox
-
-
-#maybe we have to add some of this. Just reordered to have a stable stub above here, to reduce build time
-#RUN apt-get -y install acpid anacron at avahi-daemon bash-completion build-essential cpufrequtils dvb-driver-sundtek-mediaclient ethtool ssh eventlircd hsetroot i965-va-driver ir-keytable irserver libpam-ck-connector linux-firmware linux-firmware-nonfree linux-firmware-yavdr lirc logrotate mhddfs nvram-wakeup pm-utils ubuntu-extras-keyring udisks-glue update-manager-core ureadahead usbutils vdr vdr-addon-acpiwakeup vdr-addon-avahi-linker vdr-addon-lifeguard vdr-plugin-avahi4vdr vdr-plugin-channellists vdr-plugin-dbus2vdr vdr-plugin-dummydevice vdr-plugin-dvbsddevice vdr-plugin-dvbhddevice vdr-plugin-dynamite vdr-plugin-epgsearch vdr-plugin-femon vdr-plugin-live vdr-plugin-markad vdr-plugin-menuorg vdr-plugin-pvr350 vdr-plugin-restfulapi vdr-plugin-skinnopacity vdr-plugin-streamdev-server vdr-plugin-wirbelscan vdr-skins-speciallogos vdr-tftng-anthraize vdr-tftng-pearlhd vdr-tftng-standard vdr-xpmlogos vim wakeonlan wget wpasupplicant w-scan xfsprogs yavdr-base yavdr-hostwakeup yavdr-remote yavdr-utils yavdr-webfrontend
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#Expose Ports
-#EXPOSE 22 
-#EXPOSE 80 
-#EXPOSE 111 
-#EXPOSE 2004 
-#EXPOSE 2049 
-#EXPOSE 3000 
-#EXPOSE 6419 
-#EXPOSE 8002 
-#EXPOSE 8008
+# Expose Ports
+EXPOSE 22 
+EXPOSE 6419 
+EXPOSE 34890
+EXPOSE 37890
 
-#Stubs:
-#
-# add init/start
-# add Volume to link to for configs
-# use mkdir/ln -s/mv way to move generated configs to Volume
-# Guess:
-# /var/lib/vdr
-# /etc/vdr
-
-#add configfiles
-#ADD ./vdrconfig/conf.d/ /etc/vdr/conf.d/
-#ADD ./vdrconfig/conf.aval/ /etc/vdr/conf.aval/
-
-#Add runscript for vdr
+# Add runscript for vdr
 RUN mkdir /etc/service/vdr/
 ADD ./scripts/vdr/run /etc/service/vdr/run
 RUN chmod +x /etc/service/vdr/run
 
-#add runscript for tntnet / yavdr webinterface
-#RUN mkdir /etc/service/tntnet/
-#ADD ./scripts/tntnet/run /etc/service/tntnet/run
-#RUN chmod +x /etc/service/tntnet/run
-
+#########################################################################################
+# User passwords cannot be changed with chpasswd because of pam implementation. 
+# We need to recompile pam support and then change password so ssh can be done as root
+#----------------------------------------------------------------------------------------
 # Setup build environment for libpam
-#RUN apt-get update && apt-get -y build-dep pam
+RUN apt-get update && apt-get -y build-dep pam
 # Rebuild and istall libpam with --disable-audit option
-#RUN export CONFIGURE_OPTS=--disable-audit && cd /root && apt-get -b source pam && dpkg -i libpam-doc*.deb libpam-modules*.deb libpam-runtime*.deb libpam0g*.deb
+RUN export CONFIGURE_OPTS=--disable-audit && cd /root && apt-get -b source pam && dpkg -i libpam-doc*.deb libpam-modules*.deb libpam-runtime*.deb libpam0g*.deb
 
-#make a default user with name dockervdr and Password vdr
-#RUN adduser --disabled-password --gecos "" dockervdr
-#RUN  echo "dockervdr:vdr"| chpasswd
-#
-#RUN apt-get -y install vdr-plugin-vnsiserver vdr-plugin-xineliboutput vdr-plugin-osdteletext vdr-plugin-softhddevice
-#
-#RUN apt-get -y dist-upgrade
+# Change root password to vdr so we can access via ssh. Instead is better to use nsenter
+RUN  echo "root:vdr"| chpasswd
+#########################################################################################
 
+# Enable ssh
+RUN rm -f /etc/service/sshd/down
+
+# Regenerate SSH host keys. baseimage-docker does not contain any, so you
+# have to do that yourself. You may also comment out this instruction; the
+# init system will auto-generate one during boot.
+RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]

@@ -5,7 +5,13 @@ Basic headless VDR Server based on Docker
 
 1. docker build --rm=true -t "chrodriguez/docker-vdr-headless" .
 
-2. docker run -d --privileged --name="vdr" -p 3000:3000 -p 34890:34890 -p 37890:37890  chrodriguez/docker-vdr-headless
+2. docker run -d --privileged --name="vdr" \
+	-p 2200:22 \
+	-p 34890:34890  \
+	-p 37890:37890  \
+	-v /etc/timezone:/etc/timezone:ro \
+	-v /etc/localtime:/etc/localtime:ro \
+	chrodriguez/docker-vdr-headless
 
 3. sudo nsenter vdr
 
