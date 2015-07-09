@@ -1,0 +1,4 @@
+/local-configurations/etc/vdr/*conf
+/local-configurations/etc/vdr/plugins/*/*conf
+/local-configurations/var/lib/vdr/channels.conf
+/local-configurations/var/lib/vdr/setup.conf

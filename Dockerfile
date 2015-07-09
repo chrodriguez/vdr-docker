@@ -45,9 +45,6 @@ RUN apt-get -y install vdr vdr-plugin-vnsiserver vdr-plugin-pvrinput vdr-plugin-
 # Install linux-firmware to access specific video drivers
 RUN apt-get -y install linux-firmware
 
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 # Expose Ports
 EXPOSE 22 
 EXPOSE 6419 
@@ -79,6 +76,9 @@ RUN rm -f /etc/service/sshd/down
 # have to do that yourself. You may also comment out this instruction; the
 # init system will auto-generate one during boot.
 RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
