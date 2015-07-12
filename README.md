@@ -11,11 +11,11 @@ Basic headless VDR Server based on Docker
 	-p 37890:37890  \
 	-v /etc/timezone:/etc/timezone:ro \
 	-v /etc/localtime:/etc/localtime:ro \
-	-v `pwd`/local-configurations/var/lib/vdr/channels.conf:/var/lib/vdr/channels.conf \
-	-v `pwd`/local-configurations/var/lib/vdr/setup.conf:/var/lib/vdr/setup.conf \
-	-v `pwd`/local-configurations/etc/vdr/svdrphosts.conf:/etc/vdr/svdrphosts.conf \
-	-v `pwd`/local-configurations/etc/vdr/plugins/vnsiserver/allowed_hosts.conf:/etc/vdr/plugins/vnsiserver/allowed_hosts.conf \
-	-v `pwd`/local-configurations/etc/vdr/plugins/xineliboutput/allowed_hosts.conf:/etc/vdr/plugins/xineliboutput/allowed_hosts.conf \
+	-v `pwd`/config/channels.conf:/var/lib/vdr/channels.conf \
+	-v `pwd`/config/setup.conf:/var/lib/vdr/setup.conf \
+	-v `pwd`/config/svdrphosts.conf:/var/lib/vdr/svdrphosts.conf \
+	-v `pwd`/config/plugins/vnsiserver/allowed_hosts.conf:/var/lib/vdr/plugins/vnsiserver/allowed_hosts.conf \
+	-v `pwd`/config/plugins/xineliboutput/allowed_hosts.conf:/var/lib/vdr/plugins/xineliboutput/allowed_hosts.conf \
 	chrodriguez/docker-vdr-headless
 
 3. sudo nsenter vdr
