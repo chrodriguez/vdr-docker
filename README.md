@@ -3,7 +3,7 @@ docker-vdr
 
 Basic headless VDR Server based on Docker
 
-1. docker build --rm=true -t "chrodriguez/docker-vdr-headless" .
+1. docker build --rm=true -t "chrodriguez/vdr" .
 
 2. docker run -d --privileged --name="vdr" \
 	-p 2200:22 \
@@ -16,7 +16,7 @@ Basic headless VDR Server based on Docker
 	-v `pwd`/config/svdrphosts.conf:/var/lib/vdr/svdrphosts.conf \
 	-v `pwd`/config/plugins/vnsiserver/allowed_hosts.conf:/var/lib/vdr/plugins/vnsiserver/allowed_hosts.conf \
 	-v `pwd`/config/plugins/xineliboutput/allowed_hosts.conf:/var/lib/vdr/plugins/xineliboutput/allowed_hosts.conf \
-	chrodriguez/docker-vdr-headless
+	chrodriguez/vdr
 
 3. sudo nsenter vdr
 
