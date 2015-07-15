@@ -25,7 +25,7 @@ docker run -d --privileged --name="vdr" \
 	-v `pwd`/config/svdrphosts.conf:/var/lib/vdr/svdrphosts.conf \
 	-v `pwd`/config/plugins/vnsiserver/allowed_hosts.conf:/var/lib/vdr/plugins/vnsiserver/allowed_hosts.conf \
 	-v `pwd`/config/plugins/xineliboutput/allowed_hosts.conf:/var/lib/vdr/plugins/xineliboutput/allowed_hosts.conf \
-	chrodriguez/vdr-docker
+	chrodriguez/vdr
 ```
 
 It's important to edit custom configuration as it's passed as container volumes.
