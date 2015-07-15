@@ -1,4 +1,4 @@
-# docker-vdr is my VDR used@home, tunned for my country: Argetina
+# Docker VDR tunned for my country: Argentina
 
 Basic headless VDR Server based on Docker
 
