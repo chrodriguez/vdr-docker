@@ -80,5 +80,8 @@ RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+VOLUME /var/lib/vdr
+VOLUME /srv
+
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]

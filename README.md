@@ -7,7 +7,7 @@ Basic headless VDR Server based on Docker
 
 Simply run: 
 ```
-docker build --rm=true -t "chrodriguez/vdr-docker" .
+docker build --rm=true -t "chrodriguez/vdr" .
 ```
 
 # Runing vdr
