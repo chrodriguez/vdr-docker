@@ -32,13 +32,13 @@ RUN apt-get -y install build-essential libjpeg-dev libncursesw5-dev libfreetype6
 RUN apt-get -y install libudev-dev curl libcurl4-nss-dev
 
 # GET SOURCES
-RUN git clone https://github.com/chrodriguez/vdr.git /tmp/vdr && \
-    git clone https://github.com/FernetMenta/vdr-plugin-vnsiserver.git /tmp/vdr/PLUGINS/src/vnsiserver && \
-    git clone git://projects.vdr-developer.org/vdr-plugin-pvrinput.git /tmp/vdr/PLUGINS/src/pvrinput
+RUN git clone https://github.com/chrodriguez/vdr.git /vdr && \
+    git clone https://github.com/FernetMenta/vdr-plugin-vnsiserver.git /vdr/PLUGINS/src/vnsiserver && \
+    git clone git://projects.vdr-developer.org/vdr-plugin-pvrinput.git /vdr/PLUGINS/src/pvrinput
 
-RUN curl -SL http://www.saunalahti.fi/~rahrenbe/vdr/iptv/files/vdr-iptv-2.2.1.tgz | tar -xzC /tmp/vdr/PLUGINS/src && \
-    mv /tmp/vdr/PLUGINS/src/iptv-2.2.1 /tmp/vdr/PLUGINS/src/iptv
-RUN cd /tmp/vdr && \
+RUN curl -SL http://www.saunalahti.fi/~rahrenbe/vdr/iptv/files/vdr-iptv-2.2.1.tgz | tar -xzC /vdr/PLUGINS/src && \
+    mv /vdr/PLUGINS/src/iptv-2.2.1 /vdr/PLUGINS/src/iptv
+RUN cd /vdr && \
     VIDEODIR=/recordings make && \
     VIDEODIR=/recordings make install
 

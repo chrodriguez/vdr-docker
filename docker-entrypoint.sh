@@ -8,7 +8,7 @@ fi
 if [ "$1" = 'vdr' ]; then
   CONFDIR=/var/lib/vdr
   if [ ! "$(ls -A $CONFDIR)" ]; then
-    cd /tmp/vdr && make install
+    cd /vdr && make install
     cp -pr /tmp/config/* $CONFDIR
   fi
 fi
