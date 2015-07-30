@@ -52,4 +52,13 @@ docker run --rm -it --entrypoint=w_scan chrodriguez/vdr \
 ```
 # IPTV channels
 
-For argentina we use: http://radiosargentina.com.ar/
+IPTV channels are added as specified by [vdr iptv
+plugin](http://www.saunalahti.fi/~rahrenbe/vdr/iptv/). 
+
+Some IPTV channels are provided in [channels.conf](config/channels.conf). They
+use `vlc2iptv` script that will look for a file named as channel (be carefull
+with channels names because they can break this integration if using space or -)
+This files need to be inside config dir under
+[plugins/iptv/channels](plugins/iptv/channels)
+
+Source IPTV channels for argentina can be downloaded from http://radiosargentina.com.ar/
