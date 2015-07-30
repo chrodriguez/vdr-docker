@@ -1,4 +1,4 @@
-# Docker VDR tunned for my country: Argentina
+# Docker VDR patched for Argentina ISDB-T
 
 Basic headless VDR Server based on Docker
 
@@ -12,35 +12,44 @@ docker build --rm=true -t "chrodriguez/vdr" .
 
 # Runing vdr
 
-The first time you run this image you can use:
+Run this image as:
 
 ```
-docker run -d --privileged --name="vdr" \
-	-p 2200:22 \
-	-p 34890:34890  \
-	-p 37890:37890  \
-	-v /etc/timezone:/etc/timezone:ro \
-	-v /etc/localtime:/etc/localtime:ro \
-	-v `pwd`/config/channels.conf:/var/lib/vdr/channels.conf \
-	-v `pwd`/config/setup.conf:/var/lib/vdr/setup.conf \
-	-v `pwd`/config/svdrphosts.conf:/var/lib/vdr/svdrphosts.conf \
-	-v `pwd`/config/plugins/vnsiserver/allowed_hosts.conf:/var/lib/vdr/plugins/vnsiserver/allowed_hosts.conf \
-	-v `pwd`/config/plugins/xineliboutput/allowed_hosts.conf:/var/lib/vdr/plugins/xineliboutput/allowed_hosts.conf \
-	chrodriguez/vdr
+docker run --privileged -p 6419:6419 -p 34890:34890 \
+  -v $HOME/vdr-config:/var/lib/vdr \
+  -it \
+  --name=vdr \
+  chrodriguez/vdr
 ```
 
-It's important to edit custom configuration as it's passed as container volumes.
+In this case, configuration will be saved on local filesystem `$HOME/vdr-config`
 
-## If you need to enter container:
+## Change default arguments
+When run without arguments, it will run vdr with the following arguments:
 
-* You can use nsenter
-* SSH is enabled on port 2200 as root: password vdr
-* To analyze logs: `docker logs -f vdr`
+```
+vdr -p 6419 -P vnsiserver -P iptv
+```
 
-## Custom VDR plugin options
+If this arguments are not ok with your needs, you can run the image with custom
+arguments:
 
-Any options for plugins can be passed by arguments in scripts/vdr/run
+```
+docker run chrodriguez/vdr -V
+```
 
-# See also
+Will show vdr and compiled plugins versions
 
-Configuration used by me can be downloaded from: https://github.com/chrodriguez/vdr-my-configuration
+# Scanning Channels
+
+Default configuration, will setup Argentina ISDB-T channels for La Plata's city
+and a set of IPTV channels.
+You can scan for your channels using w-scan running:
+
+```
+docker run --rm -it --entrypoint=w_scan chrodriguez/vdr \ 
+  -a0 -I /usr/share/dvb/dvb-t/ar-Argentina -o 21
+```
+# IPTV channels
+
+For argentina we use: http://radiosargentina.com.ar/
