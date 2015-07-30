@@ -47,7 +47,7 @@ and a set of IPTV channels.
 You can scan for your channels using w-scan running:
 
 ```
-docker run --rm -it --entrypoint=w_scan chrodriguez/vdr \ 
+docker run --rm -it chrodriguez/vdr w_scan \
   -a0 -I /usr/share/dvb/dvb-t/ar-Argentina -o 21
 ```
 # IPTV channels
@@ -60,5 +60,8 @@ use `vlc2iptv` script that will look for a file named as channel (be carefull
 with channels names because they can break this integration if using space or -)
 This files need to be inside config dir under
 [plugins/iptv/channels](config/plugins/iptv/channels)
+
+Each channel file can set *VIDEO_BITRATE* and *AUDIO_BITRATE* variables in
+addition to *URL* to change default VIDRO_BITATE and AUDIO_BITRARE
 
 Source IPTV channels for argentina can be downloaded from http://radiosargentina.com.ar/
