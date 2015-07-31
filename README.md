@@ -40,6 +40,18 @@ docker run chrodriguez/vdr -V
 
 Will show vdr and compiled plugins versions
 
+```
+docker run -e TZ=America/Argentina/Buenos_Aires -e LANG=en_US.UTF-8 \
+  -v /home/car/vdr/config:/var/lib/vdr -v /home/car/vdr/recordings:/recordings \
+  -it --privileged --name=vdr \
+  -p 6419:6419 -p 34890:34890 \
+  chrodriguez/vdr -p 6419 -P vnsiserver -P pvrinput -P iptv
+```
+
+Will start vdr setting TZ to my country and default codeset to UTF8. Then I
+mount local filesystem volumes and nam docker container as vdr. This command
+will start vdr with plugins: vnsiserver pvrinput and iptv
+
 # Scanning Channels
 
 Default configuration, will setup Argentina ISDB-T channels for La Plata's city
@@ -47,7 +59,7 @@ and a set of IPTV channels.
 You can scan for your channels using w-scan running:
 
 ```
-docker run --rm -it chrodriguez/vdr w_scan \
+docker run --rm --privileged -it chrodriguez/vdr w_scan \
   -a0 -I /usr/share/dvb/dvb-t/ar-Argentina -o 21
 ```
 # IPTV channels
