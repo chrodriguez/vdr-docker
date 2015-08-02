@@ -77,3 +77,15 @@ Each channel file can set *VIDEO_BITRATE* and *AUDIO_BITRATE* variables in
 addition to *URL* to change default VIDRO_BITATE and AUDIO_BITRARE
 
 Source IPTV channels for argentina can be downloaded from http://radiosargentina.com.ar/
+
+# Bugs
+
+It seems to be problems with kernel 3.16. Try using 3.13 if w_scan 
+complains with:
+
+```
+tune to: QAM_AUTO f = 527142 kHz I999B6C999D999T999G999Y0  (no signal)
+(time: 06:37) Info: no data from PMT
+Info: no data from SDT(actual)
+Info: no data from NIT(actual)
+```
